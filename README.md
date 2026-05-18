@@ -1,62 +1,83 @@
 # Sistema Web de Agendamento de Serviços
 
-Projeto Integrador desenvolvido com o objetivo de criar um sistema web para gerenciamento administrativo de agendamentos de serviços, integrando frontend, backend e banco de dados.
+Projeto Integrador desenvolvido com o objetivo de criar um sistema web para gerenciamento administrativo de agendamentos, integrando frontend, backend e banco de dados.
 
 ---
 
 ## 📌 Descrição
 
-O sistema permite que o administrador cadastre serviços e registre agendamentos por **serviço, data e horário**, facilitando o controle da agenda e a organização dos atendimentos.  
-O sistema é de uso interno e não possui acesso direto por parte dos clientes.
+O sistema permite que o administrador gerencie clientes, serviços e agendamentos em uma interface web moderna e organizada.  
+Os agendamentos são registrados por **cliente, serviço, data e horário**, garantindo maior controle sobre a agenda e evitando conflitos.
+
+A aplicação foi desenvolvida para uso interno, sendo operada exclusivamente pelo administrador do sistema.
 
 ---
 
 ## 🎯 Objetivo do Projeto
 
-Desenvolver uma aplicação web que auxilie pequenos negócios na organização de seus agendamentos, substituindo controles manuais e evitando conflitos de horários.
+Desenvolver uma aplicação web capaz de organizar e centralizar o controle de atendimentos, substituindo métodos manuais como anotações e planilhas, proporcionando mais eficiência e confiabilidade no gerenciamento da agenda.
 
 ---
 
 ## 👤 Público-alvo
 
-Administrador do sistema, podendo ser:
-- Proprietário do negócio
-- Funcionário responsável
-- Recepcionista
+O sistema é voltado para uso administrativo, podendo ser utilizado por:
+
+- Proprietário do negócio  
+- Funcionário responsável  
+- Recepcionista  
 
 ---
 
 ## ⚙️ Funcionalidades Principais
 
-- Cadastro de serviços
-- Listagem de serviços
-- Cadastro de agendamentos por serviço, data e horário
-- Visualização da agenda de atendimentos
-- Alteração do status dos agendamentos
+- Cadastro, edição e exclusão de clientes  
+- Cadastro e gerenciamento de serviços  
+- Definição de duração e preço dos serviços  
+- Criação e edição de agendamentos  
+- Visualização da agenda completa  
+- Filtros por data e status  
+- Controle de status dos atendimentos:
+  - Agendado  
+  - Concluído  
+  - Cancelado  
+- Dashboard com resumo do sistema  
 
 ---
 
 ## 🧱 Estrutura do Sistema
 
-O sistema é composto por:
-- **Frontend:** Interface web acessada via navegador
-- **Backend:** Responsável pelas regras de negócio
-- **Banco de Dados:** Armazenamento das informações
+O sistema é composto por três camadas:
+
+- **Frontend:** Interface web desenvolvida para interação com o usuário  
+- **Backend:** Responsável pelas regras de negócio e API REST  
+- **Banco de Dados:** Armazenamento persistente das informações  
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-> Em definição
+- **Frontend:** HTML, CSS e JavaScript  
+- **Backend:** Python com Flask  
+- **Banco de Dados:** SQLite  
 
 ---
 
-## 🚧 Status do Projeto
+## 📊 Modelo do Sistema
 
-🔧 Em desenvolvimento (Projeto Integrador)
+O sistema é baseado nas seguintes entidades:
+
+- Administrador  
+- Cliente  
+- Serviço  
+- Agendamento  
+
+Os relacionamentos permitem que cada agendamento esteja vinculado a um cliente, um serviço e um administrador, garantindo a organização e integridade dos dados.
 
 ---
 
 ## 📄 Observações
 
-Este projeto está sendo desenvolvido como parte do Projeto Integrador do curso, seguindo os requisitos propostos pelo professor, com foco na integração completa entre as camadas do sistema.
+Este projeto foi desenvolvido como parte do Projeto Integrador, com foco na aplicação prática dos conceitos de desenvolvimento web, integração entre sistemas e organização de dados.
+
+A solução proposta atende às necessidades de pequenos negócios que buscam melhorar o controle de seus atendimentos de forma simples e eficiente.
