@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Agendamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">A</div>
+        <div>
+          <h1>Agendamentos</h1>
+          <p>Painel de atendimento</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-link active" data-section="dashboard">Dashboard</button>
+        <button class="nav-link" data-section="clientes">Clientes</button>
+        <button class="nav-link" data-section="servicos">Serviços</button>
+        <button class="nav-link" data-section="agendamentos">Agendamentos</button>
+      </nav>
+
+      <div class="api-box card">
+        <div class="section-title compact">
+          <h3>Conexão da API</h3>
+        </div>
+        <label for="apiBaseUrl">URL base</label>
+        <input id="apiBaseUrl" type="text" placeholder="http://127.0.0.1:5000" />
+        <div class="api-actions">
+          <button id="saveApiBtn" class="btn btn-primary">Salvar</button>
+          <button id="testApiBtn" class="btn btn-secondary">Testar</button>
+        </div>
+        <small id="apiStatus" class="helper-text">Aguardando teste de conexão.</small>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Sistema de Agendamento</p>
+          <h2 id="pageTitle">Dashboard</h2>
+        </div>
+        <div class="topbar-actions">
+          <button id="refreshAllBtn" class="btn btn-secondary">Atualizar dados</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="content-section active">
+        <div class="hero card gradient-card">
+          <div>
+            <p class="eyebrow">Visão geral</p>
+            <h3>Controle rápido do seu atendimento</h3>
+            <p>Veja indicadores, próximos horários e o resumo do dia em uma única tela.</p>
+          </div>
+          <div class="hero-date">
+            <span>Hoje</span>
+            <strong id="todayLabel">--/--/----</strong>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card card">
+            <span class="stat-label">Clientes</span>
+            <strong id="totalClientes">0</strong>
+          </article>
+          <article class="stat-card card">
+            <span class="stat-label">Serviços</span>
+            <strong id="totalServicos">0</strong>
+          </article>
+          <article class="stat-card card">
+            <span class="stat-label">Serviços ativos</span>
+            <strong id="totalServicosAtivos">0</strong>
+          </article>
+          <article class="stat-card card">
+            <span class="stat-label">Agendamentos</span>
+            <strong id="totalAgendamentos">0</strong>
+          </article>
+        </div>
+
+        <div class="two-columns">
+          <div class="card panel">
+            <div class="section-title">
+              <h3>Agendamentos de hoje</h3>
+              <button class="btn btn-secondary btn-sm" data-action="open-section" data-target="agendamentos">Gerenciar</button>
+            </div>
+            <div id="todayAppointments" class="list-stack empty-state-inline">
+              Nenhum agendamento encontrado.
+            </div>
+          </div>
+
+          <div class="card panel">
+            <div class="section-title">
+              <h3>Status dos atendimentos</h3>
+            </div>
+            <div id="statusSummary" class="status-summary"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="clientes" class="content-section">
+        <div class="section-grid">
+          <div class="card panel form-panel">
+            <div class="section-title">
+              <h3 id="clienteFormTitle">Novo cliente</h3>
+              <button id="resetClienteBtn" class="btn btn-secondary btn-sm">Limpar</button>
+            </div>
+            <form id="clienteForm" class="form-grid">
+              <input type="hidden" id="clienteId" />
+              <div class="field full">
+                <label for="clienteNome">Nome</label>
+                <input id="clienteNome" type="text" required />
+              </div>
+              <div class="field">
+                <label for="clienteTelefone">Telefone</label>
+                <input id="clienteTelefone" type="text" required />
+              </div>
+              <div class="field full">
+                <label for="clienteObs">Observações</label>
+                <textarea id="clienteObs" rows="4"></textarea>
+              </div>
+              <div class="form-actions full">
+                <button type="submit" class="btn btn-primary">Salvar cliente</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card panel table-panel">
+            <div class="section-title">
+              <h3>Lista de clientes</h3>
+              <input id="clienteBusca" class="table-search" type="search" placeholder="Buscar por nome ou telefone" />
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Observações</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="clientesTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="servicos" class="content-section">
+        <div class="section-grid">
+          <div class="card panel form-panel">
+            <div class="section-title">
+              <h3 id="servicoFormTitle">Novo serviço</h3>
+              <button id="resetServicoBtn" class="btn btn-secondary btn-sm">Limpar</button>
+            </div>
+            <form id="servicoForm" class="form-grid">
+              <input type="hidden" id="servicoId" />
+              <div class="field full">
+                <label for="servicoNome">Nome</label>
+                <input id="servicoNome" type="text" required />
+              </div>
+              <div class="field">
+                <label for="servicoDuracao">Duração (min)</label>
+                <input id="servicoDuracao" type="number" min="1" required />
+              </div>
+              <div class="field">
+                <label for="servicoPreco">Preço</label>
+                <input id="servicoPreco" type="number" min="0" step="0.01" />
+              </div>
+              <div class="field checkbox-field full">
+                <label>
+                  <input id="servicoAtivo" type="checkbox" checked />
+                  Serviço ativo
+                </label>
+              </div>
+              <div class="form-actions full">
+                <button type="submit" class="btn btn-primary">Salvar serviço</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card panel table-panel">
+            <div class="section-title">
+              <h3>Lista de serviços</h3>
+              <select id="servicoFiltroAtivo" class="table-search">
+                <option value="todos">Todos</option>
+                <option value="1">Ativos</option>
+                <option value="0">Inativos</option>
+              </select>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Duração</th>
+                    <th>Preço</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="servicosTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="agendamentos" class="content-section">
+        <div class="section-grid agendamento-layout">
+          <div class="card panel form-panel">
+            <div class="section-title">
+              <h3 id="agendamentoFormTitle">Novo agendamento</h3>
+              <button id="resetAgendamentoBtn" class="btn btn-secondary btn-sm">Limpar</button>
+            </div>
+            <form id="agendamentoForm" class="form-grid">
+              <input type="hidden" id="agendamentoId" />
+              <div class="field">
+                <label for="agendamentoCliente">Cliente</label>
+                <select id="agendamentoCliente" required></select>
+              </div>
+              <div class="field">
+                <label for="agendamentoServico">Serviço</label>
+                <select id="agendamentoServico" required></select>
+              </div>
+              <div class="field">
+                <label for="agendamentoAdmin">Administrador</label>
+                <select id="agendamentoAdmin" required></select>
+              </div>
+              <div class="field">
+                <label for="agendamentoStatus">Status</label>
+                <select id="agendamentoStatus">
+                  <option value="AGENDADO">AGENDADO</option>
+                  <option value="CONCLUIDO">CONCLUIDO</option>
+                  <option value="CANCELADO">CANCELADO</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="agendamentoData">Data</label>
+                <input id="agendamentoData" type="date" required />
+              </div>
+              <div class="field">
+                <label for="agendamentoHora">Horário</label>
+                <input id="agendamentoHora" type="time" required />
+              </div>
+              <div class="field full">
+                <label for="agendamentoObs">Observações</label>
+                <textarea id="agendamentoObs" rows="4"></textarea>
+              </div>
+              <div class="form-actions full">
+                <button type="submit" class="btn btn-primary">Salvar agendamento</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card panel table-panel">
+            <div class="section-title wrap">
+              <h3>Agenda</h3>
+              <div class="filters-row">
+                <input id="filtroData" type="date" class="table-search" />
+                <select id="filtroStatus" class="table-search">
+                  <option value="">Todos os status</option>
+                  <option value="AGENDADO">AGENDADO</option>
+                  <option value="CONCLUIDO">CONCLUIDO</option>
+                  <option value="CANCELADO">CANCELADO</option>
+                </select>
+                <button id="aplicarFiltrosBtn" class="btn btn-secondary btn-sm">Filtrar</button>
+                <button id="limparFiltrosBtn" class="btn btn-secondary btn-sm">Limpar</button>
+              </div>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Status</th>
+                    <th>Administrador</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="agendamentosTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
