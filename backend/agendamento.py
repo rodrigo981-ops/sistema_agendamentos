@@ -5,7 +5,6 @@ import sqlite3
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, g
 
-# Config
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "agendamento.db")
 
@@ -13,7 +12,6 @@ STATUS_VALIDOS = {"AGENDADO", "CANCELADO", "CONCLUIDO"}
 
 app = Flask(__name__)
 
-# Banco De Dados
 def get_db():
     if "db" not in g:
         conectar = sqlite3.connect(DB_PATH)
@@ -93,7 +91,6 @@ def setup_database():
     finally:
         conectar.close()
 
-# Helpers
 def row_to_dict(row):
     return dict(row) if row else None
 
