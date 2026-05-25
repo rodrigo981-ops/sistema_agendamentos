@@ -83,14 +83,6 @@ Cada agendamento está vinculado a um cliente, um serviço e um administrador, g
 
 ---
 
-## 💡 Exemplos de Serviços
-
-- ✂️ Corte de cabelo  
-- 🧔 Barba  
-- 💈 Corte + Barba  
-
----
-
 ## 📄 Observações
 
 Este projeto foi desenvolvido como parte do Projeto Integrador, com foco na aplicação prática dos conceitos de:
