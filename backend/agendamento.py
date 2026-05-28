@@ -541,7 +541,6 @@ def deletar_servico(servico_id):
 
     return success("Serviço removido com sucesso.")
 
-# Agendamentos
 @app.route("/agendamentos", methods=["GET"])
 def listar_agendamentos():
     conectar = get_db()
@@ -763,7 +762,6 @@ def deletar_agendamento(agendamento_id):
 
     return success("Agendamento removido com sucesso.")
 
-# Administradores
 @app.route("/administradores", methods=["GET"])
 def listar_administradores():
     conectar = get_db()
@@ -774,7 +772,6 @@ def listar_administradores():
     """).fetchall()
     return jsonify([dict(r) for r in rows])
 
-# Cli / Terminal
 def print_json(data):
     print(json.dumps(data, indent=2, ensure_ascii=False))
 
@@ -795,7 +792,6 @@ def cli_seed():
         create_tables(conectar)
         ensure_default_admin(conectar)
 
-        # Clientes
         conectar.execute("""
             INSERT INTO clientes (nome, telefone, observacoes)
             SELECT ?, ?, ?
@@ -808,7 +804,6 @@ def cli_seed():
             WHERE NOT EXISTS (SELECT 1 FROM clientes WHERE telefone = ?)
         """, ("Maria Souza", "11999990002", "Prefere horário da manhã", "11999990002"))
 
-        # Serviços
         conectar.execute("""
             INSERT INTO servicos (nome, duracao_minutos, preco, ativo)
             SELECT ?, ?, ?, 1
@@ -826,7 +821,6 @@ def cli_seed():
     finally:
         conectar.close()
 
-
 def cli_listar_clientes():
     conectar = get_connection()
     try:
@@ -834,7 +828,6 @@ def cli_listar_clientes():
         print_json([dict(r) for r in rows])
     finally:
         conectar.close()
-
 
 def cli_criar_cliente(args):
     if len(args) < 2:
@@ -856,7 +849,6 @@ def cli_criar_cliente(args):
     finally:
         conectar.close()
 
-
 def cli_listar_servicos():
     conectar = get_connection()
     try:
@@ -864,7 +856,6 @@ def cli_listar_servicos():
         print_json([dict(r) for r in rows])
     finally:
         conectar.close()
-
 
 def cli_criar_servico(args):
     if len(args) < 2:
@@ -1041,7 +1032,7 @@ Exemplos:
 
 def run_cli():
     if len(sys.argv) == 1:
-        return False  # sem comando => sobe API
+        return False 
 
     comando = sys.argv[1].strip().lower()
     args = sys.argv[2:]
@@ -1090,7 +1081,6 @@ def run_cli():
     print_help()
     return True
 
-# Inicialização
 setup_database()
 if __name__ == "__main__":
     executou_cli = run_cli()
